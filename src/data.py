@@ -5,16 +5,34 @@ import json
 class Data:
     ProjectDirectory:str = (sys.argv[0])[:-5]
     Version:str = ""
-    Client:List[str] = []
-    Server:List[str] = []
-    Both:List[str] = []
+
+    DataPacks:List[str] = []
+    ResourcePacks:List[str] = []
+    ShaderPacks:List[str] = []
+
+    AllMods:List[str] = []
+    ClientMods:List[str] = []
+    ServerMods:List[str] = []
 
     @staticmethod
     def init() -> None:
         with open(f"{Data.ProjectDirectory}/mcfg.json", "r") as file:
             data = json.load(file)
             Data.Version = data["version"]
-            Data.Client = data["client"]
-            Data.Server = data["server"]
-            Data.Both = data["both"]
+
+            Data.DataPacks = data["datapacks"]
+            Data.ResourcePacks = data["resourcepacks"]
+            Data.ShaderPacks = data["shaderpacks"]
+
+            Data.AllMods = Data.ClientMods
+            Data.ClientMods = data["mods"]["client"]
+            Data.ServerMods = data["mods"]["server"]
+
+            for mod in data["mods"]["dual"]:
+                Data.AllMods.append(mod)
+                Data.ClientMods.append(mod)
+                Data.ServerMods.append(mod)
+
+            for mod in Data.ServerMods:
+                Data.AllMods.append(mod)
         return
