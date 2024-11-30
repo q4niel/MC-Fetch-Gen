@@ -16,6 +16,7 @@ Download the latest release from the GitHub releases section.
 
 3. **Configure your JSON File**
 Create your JSON configuration file in the same directory as the executable.
+Name it 'mcfg.json'.
 
 4. **Running the Executable**
 Run the executable. This will generate a new directory by your configuration within the same folder. Inside the build folder, you will find shell scripts (.sh) for Unix-like systems and batch scripts (.bat) for Windows. There will also be multiple script versions depending on your **Minecraft** environment: **server**, **client**, or **full**.
