@@ -24,15 +24,17 @@ class Data:
             Data.ResourcePacks = data["resourcepacks"]
             Data.ShaderPacks = data["shaderpacks"]
 
-            Data.AllMods = Data.ClientMods
             Data.ClientMods = data["mods"]["client"]
             Data.ServerMods = data["mods"]["server"]
 
-            for mod in data["mods"]["dual"]:
+            for mod in Data.ClientMods:
                 Data.AllMods.append(mod)
-                Data.ClientMods.append(mod)
-                Data.ServerMods.append(mod)
 
             for mod in Data.ServerMods:
+                Data.AllMods.append(mod)
+
+            for mod in data["mods"]["dual"]:
+                Data.ClientMods.append(mod)
+                Data.ServerMods.append(mod)
                 Data.AllMods.append(mod)
         return
