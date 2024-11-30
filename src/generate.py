@@ -13,7 +13,7 @@ def replaceFileNameShell(bad:str, good:str) -> str:
     )
 
 def makeShell(name:str, fns:List[Callable]) -> None:
-    with open(f"{Data.ProjectDirectory}/build/{Data.Version}/{name}-{Data.Version}.sh", "w") as file:
+    with open(f"{Data.ProjectDirectory}/{Data.Version}/{name}-{Data.Version}.sh", "w") as file:
         file.write("#!/bin/bash\n\n")
 
         for fn in fns:
