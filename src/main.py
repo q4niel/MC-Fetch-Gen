@@ -1,3 +1,4 @@
+import sys
 import os
 import shutil
 from data import Data
@@ -11,6 +12,11 @@ def makeBuildDir() -> None:
     return
 
 def main() -> None:
+    if len(sys.argv) >= 2:
+        if sys.argv[1] == "-version" or sys.argv[1] == "--version":
+            print("MC Fetch Gen - Version: 0.0.0")
+            return
+
     Data.init()
     makeBuildDir()
     generateScripts()
