@@ -5,10 +5,10 @@ from data import Data
 from generate import generateScripts
 
 def makeBuildDir() -> None:
-    if os.path.exists(f"{Data.ProjectDirectory}/{Data.Version}"):
-        shutil.rmtree(f"{Data.ProjectDirectory}/{Data.Version}")
+    if os.path.exists(f"{Data.ProjectDirectory}/{Data.Name}-{Data.Version}"):
+        shutil.rmtree(f"{Data.ProjectDirectory}/{Data.Name}-{Data.Version}")
 
-    os.makedirs(f"{Data.ProjectDirectory}/{Data.Version}")
+    os.makedirs(f"{Data.ProjectDirectory}/{Data.Name}-{Data.Version}")
     return
 
 def main() -> None:

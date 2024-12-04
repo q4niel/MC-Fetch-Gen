@@ -1,3 +1,4 @@
+import os
 from data import Data
 from typing import List
 
@@ -25,15 +26,22 @@ def replaceInFileName(dir:str, bad:str, good:str) -> str:
         f"    cd ..\n"
     )
 
+def fixFileNames(dir:str) -> str:
+    return (
+        replaceInFileName(f"{dir}", "%2B", "+")
+    +   replaceInFileName(f"{dir}", "%20", " ")
+    +   replaceInFileName(f"{dir}", "%28", "(")
+    +   replaceInFileName(f"{dir}", "%29", ")")
+    )
+
 def makeShell (
-    name:str,
-    filterDirs:List[str],
+    scriptName:str,
     datapacks:List[str] = [],
     resourcepacks:List[str] = [],
     shaderpacks:List[str] = [],
     mods:List[str] = []
 ) -> None:
-    with open(f"{Data.ProjectDirectory}/{Data.Version}/{name}-{Data.Version}.sh", "w") as file:
+    with open(f"{Data.ProjectDirectory}/{Data.Name}-{Data.Version}/{Data.Name}-{Data.Version}-{scriptName}.sh", "w") as file:
         file.write("#!/bin/bash\n")
         file.write("clear\n")
         file.write("echo This script will download the following resources:\necho\n")
@@ -52,34 +60,36 @@ def makeShell (
         file.write (
             f"if [[ \"$downloadInput\" =~ ^[Yy]([Ee][Ss]?)?$ ]]; then\n"
             f"    echo Starting downloads...\n"
+            f"    mkdir {Data.Name}-{Data.Version}\n"
         )
 
-        if len(datapacks) != 0: file.write("    mkdir datapacks\n")
-        if len(resourcepacks) != 0: file.write("    mkdir resourcepacks\n")
-        if len(shaderpacks) != 0: file.write("    mkdir shaderpacks\n")
-        if len(mods) != 0: file.write("    mkdir mods\n")
+        if len(datapacks) != 0: file.write(f"    mkdir {Data.Name}-{Data.Version}/datapacks\n")
+        if len(resourcepacks) != 0: file.write(f"    mkdir {Data.Name}-{Data.Version}/resourcepacks\n")
+        if len(shaderpacks) != 0: file.write(f"    mkdir {Data.Name}-{Data.Version}/shaderpacks\n")
+        if len(mods) != 0: file.write(f"    mkdir {Data.Name}-{Data.Version}/mods\n")
 
         for link in datapacks:
-            file.write(curlToDir("datapacks", link))
+            file.write(curlToDir(f"{Data.Name}-{Data.Version}/datapacks", link))
         file.write("\n")
 
         for link in resourcepacks:
-            file.write(curlToDir("resourcepacks", link))
+            file.write(curlToDir(f"{Data.Name}-{Data.Version}/resourcepacks", link))
         file.write("\n")
 
         for link in shaderpacks:
-            file.write(curlToDir("shaderpacks", link))
+            file.write(curlToDir(f"{Data.Name}-{Data.Version}/shaderpacks", link))
         file.write("\n")
 
         for link in mods:
-            file.write(curlToDir("mods", link))
+            file.write(curlToDir(f"{Data.Name}-{Data.Version}/mods", link))
         file.write("\n")
 
-        for dir in filterDirs:
-            file.write(replaceInFileName(dir, "%2B", "+"))
-            file.write(replaceInFileName(dir, "%20", " "))
-            file.write(replaceInFileName(dir, "%28", "("))
-            file.write(replaceInFileName(dir, "%29", ")"))
+        file.write(f"    cd {Data.Name}-{Data.Version}\n")
+        if len(datapacks) != 0: file.write(fixFileNames("datapacks"))
+        if len(resourcepacks) != 0: file.write(fixFileNames("resourcepacks"))
+        if len(shaderpacks) != 0: file.write(fixFileNames("shaderpacks"))
+        if len(mods) != 0: file.write(fixFileNames("mods"))
+        file.write("    cd ..\n")
 
         file.write("fi\n")
         file.write("echo\n")
@@ -89,23 +99,21 @@ def makeShell (
         file.write("read -p \"==> \" deleteInput\n")
 
         file.write (
-            f"if [[ \"$deleteInput\" =~ ^[Yy]([Ee][Ss]?)?$ ]]; then\n"
-            f"    rm -- \"$0\"\n"
-            f"fi"
+            "if [[ \"$deleteInput\" =~ ^[Yy]([Ee][Ss]?)?$ ]]; then\n"
+            "    rm -- \"$0\"\n"
+            "fi"
         )
     return
 
 def generateScripts() -> None:
     makeShell (
         "Server",
-        ["datapacks", "mods"],
         datapacks = Data.DataPacks,
         mods = Data.ServerMods
     )
 
     makeShell (
         "Client",
-        ["resourcepacks", "shaderpacks", "mods"],
         resourcepacks = Data.ResourcePacks,
         shaderpacks = Data.ShaderPacks,
         mods = Data.ClientMods
@@ -113,7 +121,6 @@ def generateScripts() -> None:
 
     makeShell (
         "Full",
-        ["datapacks", "resourcepacks", "shaderpacks", "mods"],
         datapacks = Data.DataPacks,
         resourcepacks = Data.ResourcePacks,
         shaderpacks = Data.ShaderPacks,

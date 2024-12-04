@@ -4,6 +4,7 @@ import json
 
 class Data:
     ProjectDirectory:str = (sys.argv[0])[:-5]
+    Name:str = ""
     Version:str = ""
 
     DataPacks:List[str] = []
@@ -18,6 +19,7 @@ class Data:
     def init() -> None:
         with open(f"{Data.ProjectDirectory}/mcfg.json", "r") as file:
             data = json.load(file)
+            Data.Name = data["name"]
             Data.Version = data["version"]
 
             Data.DataPacks = data["datapacks"]
