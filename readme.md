@@ -24,9 +24,9 @@ Run the executable.
 This will generate a new directory by your configuration within the current working directory.
 Inside the build folder, you will find shell scripts (.sh)<!-- for Unix-like systems and batch scripts (.bat) for Windows-->.<br>
 There will also be multiple script versions depending on your **Minecraft** environment:
-- **Server**
-- **Client**
-- **Full**.
+    - **Server**
+    - **Client**
+    - **Full**.
 
 5. **Script Usage**
     - The scripts will create a new directory in the current working directory.
