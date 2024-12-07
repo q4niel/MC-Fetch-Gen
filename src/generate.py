@@ -1,4 +1,3 @@
-import os
 from data import Data
 from typing import List
 
@@ -11,27 +10,29 @@ def echoList(label:str, links:List[str]) -> str:
 
     return f"{string}echo\n"
 
-def curlToDir(dir:str, link:str) -> str:
-    return f"    curl -L -o ./{dir}/$(basename {link}) {link}\n"
+def curlToRelativeDirectory(dir:str, links:List[str]) -> str:
+    return "" if len(links) == 0 else (
+        f"    mkdir ./{dir}\n"
+        f"{"".join(f"    curl -L -o ./{dir}/$(basename {l}) {l}\n" for l in links)}"
+        f"\n"
+    )
 
-def replaceInFileName(dir:str, bad:str, good:str) -> str:
+def decodeRelativeDirectory(dir:str) -> str:
+    decodes:str = "".join(f"\n        new=$(echo \"$new\" | sed 's/{x[0]}/{x[1]}/g')" for x in [
+        ["%2B", "+"],
+        ["%20", " "],
+        ["%28", "("],
+        ["%29", ")"]
+    ])
+
     return (
-        f"\n    cd ./{dir}"
-        f"\n    for file in *; do"
-        f"\n        if [[ \"$file\" == *\"{bad}\"* ]]; then"
-        f"\n            new=$(echo \"$file\" | sed 's/{bad}/{good}/g')"
+        f"\n    for file in ./{dir}/*; do"
+        f"\n        new=$(echo \"$file\")"
+        f"\n{decodes}\n"
+        f"\n        if [[ \"$file\" != \"$new\" ]]; then"
         f"\n            mv \"$file\" \"$new\""
         f"\n        fi"
         f"\n    done\n"
-        f"    cd ..\n"
-    )
-
-def fixFileNames(dir:str) -> str:
-    return (
-        replaceInFileName(f"{dir}", "%2B", "+")
-    +   replaceInFileName(f"{dir}", "%20", " ")
-    +   replaceInFileName(f"{dir}", "%28", "(")
-    +   replaceInFileName(f"{dir}", "%29", ")")
     )
 
 def makeShell (
@@ -63,32 +64,18 @@ def makeShell (
             f"    mkdir {Data.Name}-{Data.Version}\n"
         )
 
-        if len(datapacks) != 0: file.write(f"    mkdir {Data.Name}-{Data.Version}/datapacks\n")
-        if len(resourcepacks) != 0: file.write(f"    mkdir {Data.Name}-{Data.Version}/resourcepacks\n")
-        if len(shaderpacks) != 0: file.write(f"    mkdir {Data.Name}-{Data.Version}/shaderpacks\n")
-        if len(mods) != 0: file.write(f"    mkdir {Data.Name}-{Data.Version}/mods\n")
-
-        for link in datapacks:
-            file.write(curlToDir(f"{Data.Name}-{Data.Version}/datapacks", link))
-        file.write("\n")
-
-        for link in resourcepacks:
-            file.write(curlToDir(f"{Data.Name}-{Data.Version}/resourcepacks", link))
-        file.write("\n")
-
-        for link in shaderpacks:
-            file.write(curlToDir(f"{Data.Name}-{Data.Version}/shaderpacks", link))
-        file.write("\n")
-
-        for link in mods:
-            file.write(curlToDir(f"{Data.Name}-{Data.Version}/mods", link))
-        file.write("\n")
-
         file.write(f"    cd {Data.Name}-{Data.Version}\n")
-        if len(datapacks) != 0: file.write(fixFileNames("datapacks"))
-        if len(resourcepacks) != 0: file.write(fixFileNames("resourcepacks"))
-        if len(shaderpacks) != 0: file.write(fixFileNames("shaderpacks"))
-        if len(mods) != 0: file.write(fixFileNames("mods"))
+
+        file.write(curlToRelativeDirectory("datapacks", datapacks))
+        file.write(curlToRelativeDirectory("resourcepacks", resourcepacks))
+        file.write(curlToRelativeDirectory("shaderpacks", shaderpacks))
+        file.write(curlToRelativeDirectory("mods", mods))
+
+        if len(datapacks) != 0: file.write(decodeRelativeDirectory("datapacks"))
+        if len(resourcepacks) != 0: file.write(decodeRelativeDirectory("resourcepacks"))
+        if len(shaderpacks) != 0: file.write(decodeRelativeDirectory("shaderpacks"))
+        if len(mods) != 0: file.write(decodeRelativeDirectory("mods"))
+
         file.write("    cd ..\n")
 
         file.write("fi\n")
