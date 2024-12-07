@@ -13,7 +13,9 @@ def echoList(label:str, links:List[str]) -> str:
 def curlToRelativeDirectory(dir:str, links:List[str]) -> str:
     return "" if len(links) == 0 else (
         f"    mkdir ./{dir}\n"
-        f"{"".join(f"    curl -L -o ./{dir}/$(basename {l}) {l}\n" for l in links)}"
+        f"    cd ./{dir}\n"
+        f"{"".join(f"    curl -L -O {l}\n" for l in links)}"
+        f"    cd ..\n"
         f"\n"
     )
 
