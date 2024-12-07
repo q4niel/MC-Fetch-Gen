@@ -14,7 +14,7 @@ def makeBuildDir() -> None:
 def main() -> None:
     if len(sys.argv) >= 2:
         if sys.argv[1] == "-version" or sys.argv[1] == "--version":
-            print("MC Fetch Gen - Version: 0.1.0")
+            print("MC Fetch Gen - Version: 0.1.1")
             return
 
     Data.init()

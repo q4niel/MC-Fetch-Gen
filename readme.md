@@ -43,7 +43,8 @@ There will also be multiple script versions depending on your **Minecraft** envi
 
 ```json
 {
-    "version": "Example-0.0.0-1.21-Fabric",
+    "name": "Example",
+    "version": "0.0.0",
     "datapacks": [],
     "resourcepacks": [],
     "shaderpacks": [
