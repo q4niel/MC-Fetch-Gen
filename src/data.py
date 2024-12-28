@@ -1,9 +1,10 @@
 from typing import List
+import os
 import sys
 import json
 
 class Data:
-    ProjectDirectory:str = (sys.argv[0])[:-5]
+    ProjectDirectory:str = (os.path.abspath(sys.argv[0]))[:-5]
     Name:str = ""
     Version:str = ""
 
