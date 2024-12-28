@@ -1,4 +1,3 @@
-
 # MC Fetch Gen
 This program automates the process of downloading various Minecraft-related assets, including datapacks, resourcepacks, shaderpacks, and mods.
 It reads a JSON file that specifies the assets to be downloaded, and generates an installer program for this collection of assets.
@@ -24,7 +23,7 @@ Run the executable.
 This will generate a new directory by your configuration within the current working directory.
 Inside the build folder, you will find your custom asset installer.
 
-5. **Script Usage**
+5. **Installer Usage**
     - The installer will create a new directory in the current working directory.
     - The new directory will contain all the downloaded assets including **datapacks**, **shaderpacks**, **resourcepacks**, and **mods**.
     ```
