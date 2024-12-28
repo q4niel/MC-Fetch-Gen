@@ -6,7 +6,7 @@ from build import build
 def main() -> None:
     if len(sys.argv) >= 2:
         if sys.argv[1] == "--version":
-            print("MC Fetch Gen - Version: 0.2.0")
+            print("MC Fetch Gen - Version: 0.3.0")
             return
 
     Data.init()
