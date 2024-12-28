@@ -74,6 +74,12 @@ def generate() -> None:
         writeAssetCategory(file, Data.ShaderPacks, "shaderpacks")
         writeAssetCategory(file, Data.AllMods, "mods")
 
+        file.write(indented(4, [
+            f"for root, subs, files in os.walk(f\"{{os.getcwd()}}/{Data.Name}-{Data.Version}\"):",
+            "    for file in files:",
+            "        os.rename(f\"{root}/{file}\", f\"{root}/{urllib.parse.unquote(file)}\")\n",
+        ]))
+
         file.write(mainTail())
 
     return
