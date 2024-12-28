@@ -1,17 +1,17 @@
 
 # MC Fetch Gen
 This program automates the process of downloading various Minecraft-related assets, including datapacks, resourcepacks, shaderpacks, and mods.
-It reads a JSON file that specifies the assets to be downloaded, and generates a series of shell<!--- and batch--> scripts based on the information.
-These scripts, when run, will download the specified assets.
+It reads a JSON file that specifies the assets to be downloaded, and generates an installer program for this collection of assets.
 
 ## Features
-- **Automatic script generation**: The program creates shell and batch scripts based on a JSON configuration file.
+- **Installer generation**: The program creates a binary installer based on a JSON configuration file.
 - **Customizable**: The JSON file can be edited to specify different assets to be downloaded.
-<!--- **Cross-platform**: The generated scripts are compatible with both Windows and Unix-like systems.-->
+
+## Dependencies
+This program relies on **Python 3** and **PyInstaller** to build the generated installers.
+You will need to install these dependencies in order to build the installer yourself.
 
 ## Usage
-### The generated scripts depend on curl.
-
 1. **Download the Executable**:<br>
 Download the latest release from the GitHub releases section.
 
@@ -22,14 +22,10 @@ Name it **mcfg.json**.
 4. **Running the Executable**:<br>
 Run the executable.
 This will generate a new directory by your configuration within the current working directory.
-Inside the build folder, you will find shell scripts (.sh)<!-- for Unix-like systems and batch scripts (.bat) for Windows-->.<br>
-There will also be multiple script versions depending on your **Minecraft** environment:
-    - **Server**
-    - **Client**
-    - **Full**.
+Inside the build folder, you will find your custom asset installer.
 
 5. **Script Usage**
-    - The scripts will create a new directory in the current working directory.
+    - The installer will create a new directory in the current working directory.
     - The new directory will contain all the downloaded assets including **datapacks**, **shaderpacks**, **resourcepacks**, and **mods**.
     ```
     /Example-XXX-XXX/
