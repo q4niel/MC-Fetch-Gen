@@ -18,7 +18,7 @@ def cleanup() -> None:
     if len(os.listdir(f"{cwd}/build")) == 0:
         shutil.rmtree(f"{cwd}/build")
 
-    shutil.move(f"{cwd}/dist/gen", f"{Data.ProjectDirectory}/{Data.Name}-{Data.Version}")
+    shutil.move(f"{cwd}/dist/gen", f"{Data.ProjectDirectory}/{Data.Name}-{Data.Version}-Installer")
 
     shutil.rmtree(f"{cwd}/dist")
 
@@ -28,6 +28,6 @@ def cleanup() -> None:
     return
 
 def build() -> None:
-    cmd(["pyinstaller", f"{Data.ProjectDirectory}/gen.py", "--onefile"])
+    cmd(["python3", "-m", "PyInstaller", f"{Data.ProjectDirectory}/gen.py", "--onefile"])
     cleanup()
     return
