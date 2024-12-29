@@ -18,7 +18,13 @@ def cleanup() -> None:
     if len(os.listdir(f"{cwd}/build")) == 0:
         shutil.rmtree(f"{cwd}/build")
 
-    shutil.move(f"{cwd}/dist/gen", f"{Data.ProjectDirectory}/{Data.Name}-{Data.Version}-Installer")
+    match os.name:
+        case "nt":
+            shutil.move(f"{cwd}/dist/gen.exe", f"{Data.ProjectDirectory}/{Data.Name}-{Data.Version}-Installer.exe")
+        case "posix":
+            shutil.move(f"{cwd}/dist/gen", f"{Data.ProjectDirectory}/{Data.Name}-{Data.Version}-Installer")
+        case _:
+            print("Unsupported OS")
 
     shutil.rmtree(f"{cwd}/dist")
 

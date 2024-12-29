@@ -4,7 +4,7 @@ import sys
 import json
 
 class Data:
-    ProjectDirectory:str = (os.path.abspath(sys.argv[0]))[:-5]
+    ProjectDirectory:str = ""
     Name:str = ""
     Version:str = ""
 
@@ -18,6 +18,14 @@ class Data:
 
     @staticmethod
     def init() -> None:
+        match os.name:
+            case "nt":
+                Data.ProjectDirectory = (os.path.abspath(sys.argv[0]))[:-8]
+            case "posix":
+                Data.ProjectDirectory = (os.path.abspath(sys.argv[0]))[:-5]
+            case _:
+                print("Unsupported OS")
+
         with open(f"{Data.ProjectDirectory}/mcfg.json", "r") as file:
             data = json.load(file)
             Data.Name = data["name"]
