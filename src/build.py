@@ -28,6 +28,12 @@ def cleanup() -> None:
     return
 
 def build() -> None:
-    cmd(["python3", "-m", "PyInstaller", f"{Data.ProjectDirectory}/gen.py", "--onefile"])
+    match os.name:
+        case "nt":
+            cmd(["py", "-3", "-m", "PyInstaller", f"{Data.ProjectDirectory}/gen.py", "--onefile"])
+        case "posix":
+            cmd(["python3", "-m", "PyInstaller", f"{Data.ProjectDirectory}/gen.py", "--onefile"])
+        case _:
+            print("Unsupported OS")
     cleanup()
     return
